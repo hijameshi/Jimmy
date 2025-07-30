@@ -1,0 +1,386 @@
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f5f5;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* App Layout */
+.app-layout {
+  min-height: 100vh;
+}
+
+.app-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 0 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.app-title {
+  color: white;
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.header-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.app-content {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* SQLFlow App Styles */
+.sqlflow-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.sqlflow-header {
+  padding: 16px 24px;
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.sqlflow-controls {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.sqlflow-content {
+  display: flex;
+  height: calc(100vh - 200px);
+  min-height: 600px;
+}
+
+.sql-editor-panel {
+  width: 40%;
+  border-right: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sql-editor-header {
+  padding: 16px;
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sql-editor-content {
+  flex: 1;
+  position: relative;
+}
+
+.visualization-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.visualization-header {
+  padding: 16px;
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.visualization-content {
+  flex: 1;
+  position: relative;
+  background: #fff;
+}
+
+.visualization-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex-direction: column;
+  color: #666;
+}
+
+.visualization-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex-direction: column;
+  color: #999;
+}
+
+.visualization-empty .anticon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: #d9d9d9;
+}
+
+/* Cytoscape Container */
+.cytoscape-container {
+  width: 100%;
+  height: 100%;
+  background: #fafafa;
+}
+
+/* Sample SQL Buttons */
+.sample-sql-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.sample-sql-button {
+  font-size: 12px;
+  height: 28px;
+  padding: 0 8px;
+}
+
+/* Upload Area */
+.upload-area {
+  padding: 20px;
+  border: 2px dashed #d9d9d9;
+  border-radius: 6px;
+  background: #fafafa;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 16px;
+}
+
+.upload-area:hover {
+  border-color: #1890ff;
+  background: #f0f8ff;
+}
+
+.upload-area.dragover {
+  border-color: #1890ff;
+  background: #e6f7ff;
+}
+
+/* Error Display */
+.error-display {
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 16px;
+  color: #a8071a;
+}
+
+.error-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.error-details {
+  font-size: 12px;
+  color: #cf1322;
+  font-family: monospace;
+  background: #fff;
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 8px;
+  border: 1px solid #ffccc7;
+}
+
+/* Summary Panel */
+.summary-panel {
+  background: #fafafa;
+  padding: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.summary-stats {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
+
+.summary-stat {
+  text-align: center;
+}
+
+.summary-stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1890ff;
+  display: block;
+}
+
+.summary-stat-label {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .sqlflow-content {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .sql-editor-panel {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .sql-editor-content {
+    height: 300px;
+  }
+  
+  .visualization-content {
+    height: 500px;
+  }
+  
+  .sqlflow-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .summary-stats {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .app-content {
+    padding: 16px;
+  }
+  
+  .sqlflow-controls {
+    gap: 8px;
+  }
+  
+  .sample-sql-buttons {
+    justify-content: center;
+  }
+  
+  .summary-stats {
+    gap: 12px;
+  }
+  
+  .app-title {
+    font-size: 20px;
+  }
+  
+  .header-subtitle {
+    font-size: 12px;
+  }
+}
+
+/* Loading Animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Ace Editor Overrides */
+.ace_editor {
+  font-family: 'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+.ace_gutter {
+  background: #fafafa !important;
+  border-right: 1px solid #e8e8e8 !important;
+}
+
+/* Antd Overrides */
+.ant-layout-header {
+  height: auto !important;
+  line-height: 1.5 !important;
+  padding: 16px 24px !important;
+}
+
+.ant-select {
+  min-width: 120px;
+}
+
+.ant-btn-group .ant-btn {
+  margin-right: 0;
+}
+
+/* Cytoscape Styles */
+.cy-node-table {
+  background-color: #1890ff;
+  color: white;
+}
+
+.cy-node-view {
+  background-color: #52c41a;
+  color: white;
+}
+
+.cy-node-source {
+  background-color: #fa8c16;
+  color: white;
+}
+
+.cy-node-target {
+  background-color: #f5222d;
+  color: white;
+}
+
+.cy-edge-join {
+  line-color: #1890ff;
+  target-arrow-color: #1890ff;
+}
+
+.cy-edge-insert {
+  line-color: #f5222d;
+  target-arrow-color: #f5222d;
+}
+
+.cy-edge-view_dependency {
+  line-color: #52c41a;
+  target-arrow-color: #52c41a;
+}
+
+.cy-edge-foreign_key {
+  line-color: #722ed1;
+  target-arrow-color: #722ed1;
+}
