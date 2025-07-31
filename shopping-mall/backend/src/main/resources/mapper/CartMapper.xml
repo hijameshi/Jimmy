@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shoppingmall.mapper.CartMapper">
+
+    <resultMap id="CartItemResultMap" type="CartItem">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="productName" column="product_name"/>
+        <result property="productPrice" column="product_price"/>
+        <result property="productImage" column="product_image"/>
+    </resultMap>
+
+    <insert id="insertCartItem" parameterType="CartItem">
+        INSERT INTO cart_items (user_id, product_id, quantity)
+        VALUES (#{userId}, #{productId}, #{quantity})
+        ON DUPLICATE KEY UPDATE 
+        quantity = quantity + #{quantity},
+        updated_at = CURRENT_TIMESTAMP
+    </insert>
+
+    <select id="findByUserId" parameterType="Long" resultMap="CartItemResultMap">
+        SELECT c.*, p.name as product_name, p.price as product_price, p.image_url as product_image
+        FROM cart_items c
+        JOIN products p ON c.product_id = p.id
+        WHERE c.user_id = #{userId}
+        ORDER BY c.created_at DESC
+    </select>
+
+    <select id="findByUserIdAndProductId" resultMap="CartItemResultMap">
+        SELECT c.*, p.name as product_name, p.price as product_price, p.image_url as product_image
+        FROM cart_items c
+        JOIN products p ON c.product_id = p.id
+        WHERE c.user_id = #{userId} AND c.product_id = #{productId}
+    </select>
+
+    <update id="updateQuantity">
+        UPDATE cart_items 
+        SET quantity = #{quantity},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = #{userId} AND product_id = #{productId}
+    </update>
+
+    <delete id="deleteByUserIdAndProductId">
+        DELETE FROM cart_items 
+        WHERE user_id = #{userId} AND product_id = #{productId}
+    </delete>
+
+    <delete id="deleteByUserId" parameterType="Long">
+        DELETE FROM cart_items WHERE user_id = #{userId}
+    </delete>
+
+</mapper>
