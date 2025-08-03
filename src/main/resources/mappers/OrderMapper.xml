@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.mapper.OrderMapper">
+
+    <resultMap id="OrderResultMap" type="com.shopping.model.Order">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="status" column="status" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="shippingAddress" column="shipping_address"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <collection property="orderItems" ofType="com.shopping.model.OrderItem">
+            <id property="id" column="item_id"/>
+            <result property="orderId" column="order_id"/>
+            <result property="productId" column="product_id"/>
+            <result property="quantity" column="item_quantity"/>
+            <result property="price" column="item_price"/>
+            <association property="product" javaType="com.shopping.model.Product">
+                <id property="id" column="product_id"/>
+                <result property="name" column="product_name"/>
+                <result property="imageUrl" column="product_image"/>
+            </association>
+        </collection>
+    </resultMap>
+
+    <resultMap id="OrderItemResultMap" type="com.shopping.model.OrderItem">
+        <id property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="price" column="price"/>
+        <association property="product" javaType="com.shopping.model.Product">
+            <id property="id" column="product_id"/>
+            <result property="name" column="product_name"/>
+            <result property="description" column="product_description"/>
+            <result property="imageUrl" column="product_image"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertOrder" parameterType="com.shopping.model.Order" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orders (user_id, total_amount, status, shipping_address)
+        VALUES (#{userId}, #{totalAmount}, #{status}, #{shippingAddress})
+    </insert>
+
+    <insert id="insertOrderItem" parameterType="com.shopping.model.OrderItem">
+        INSERT INTO order_items (order_id, product_id, quantity, price)
+        VALUES (#{orderId}, #{productId}, #{quantity}, #{price})
+    </insert>
+
+    <select id="findById" parameterType="Long" resultMap="OrderResultMap">
+        SELECT o.*, 
+               oi.id as item_id,
+               oi.product_id,
+               oi.quantity as item_quantity,
+               oi.price as item_price,
+               p.name as product_name,
+               p.image_url as product_image
+        FROM orders o
+        LEFT JOIN order_items oi ON o.id = oi.order_id
+        LEFT JOIN products p ON oi.product_id = p.id
+        WHERE o.id = #{id}
+    </select>
+
+    <select id="findByUserId" parameterType="Long" resultMap="OrderResultMap">
+        SELECT o.*, 
+               oi.id as item_id,
+               oi.product_id,
+               oi.quantity as item_quantity,
+               oi.price as item_price,
+               p.name as product_name,
+               p.image_url as product_image
+        FROM orders o
+        LEFT JOIN order_items oi ON o.id = oi.order_id
+        LEFT JOIN products p ON oi.product_id = p.id
+        WHERE o.user_id = #{userId}
+        ORDER BY o.created_at DESC
+    </select>
+
+    <select id="findAll" resultMap="OrderResultMap">
+        SELECT o.*, 
+               oi.id as item_id,
+               oi.product_id,
+               oi.quantity as item_quantity,
+               oi.price as item_price,
+               p.name as product_name,
+               p.image_url as product_image
+        FROM orders o
+        LEFT JOIN order_items oi ON o.id = oi.order_id
+        LEFT JOIN products p ON oi.product_id = p.id
+        ORDER BY o.created_at DESC
+    </select>
+
+    <update id="updateOrderStatus">
+        UPDATE orders 
+        SET status = #{status},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <select id="findOrderItemsByOrderId" parameterType="Long" resultMap="OrderItemResultMap">
+        SELECT oi.*, 
+               p.name as product_name,
+               p.description as product_description,
+               p.image_url as product_image
+        FROM order_items oi
+        JOIN products p ON oi.product_id = p.id
+        WHERE oi.order_id = #{orderId}
+    </select>
+
+    <delete id="deleteOrder" parameterType="Long">
+        DELETE FROM orders WHERE id = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shopping.mapper.CartItemMapper">
+
+    <resultMap id="CartItemResultMap" type="com.shopping.model.CartItem">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="quantity" column="quantity"/>
+        <result property="createdAt" column="created_at"/>
+        <association property="product" javaType="com.shopping.model.Product">
+            <id property="id" column="product_id"/>
+            <result property="name" column="product_name"/>
+            <result property="description" column="product_description"/>
+            <result property="price" column="product_price"/>
+            <result property="stockQuantity" column="product_stock"/>
+            <result property="imageUrl" column="product_image"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertCartItem" parameterType="com.shopping.model.CartItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cart_items (user_id, product_id, quantity)
+        VALUES (#{userId}, #{productId}, #{quantity})
+        ON DUPLICATE KEY UPDATE quantity = quantity + #{quantity}
+    </insert>
+
+    <select id="findByUserId" parameterType="Long" resultMap="CartItemResultMap">
+        SELECT c.*, 
+               p.name as product_name,
+               p.description as product_description,
+               p.price as product_price,
+               p.stock_quantity as product_stock,
+               p.image_url as product_image
+        FROM cart_items c
+        JOIN products p ON c.product_id = p.id
+        WHERE c.user_id = #{userId}
+        ORDER BY c.created_at DESC
+    </select>
+
+    <select id="findByUserIdAndProductId" resultMap="CartItemResultMap">
+        SELECT c.*, 
+               p.name as product_name,
+               p.description as product_description,
+               p.price as product_price,
+               p.stock_quantity as product_stock,
+               p.image_url as product_image
+        FROM cart_items c
+        JOIN products p ON c.product_id = p.id
+        WHERE c.user_id = #{userId} AND c.product_id = #{productId}
+    </select>
+
+    <update id="updateQuantity">
+        UPDATE cart_items 
+        SET quantity = #{quantity}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteCartItem" parameterType="Long">
+        DELETE FROM cart_items WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByUserId" parameterType="Long">
+        DELETE FROM cart_items WHERE user_id = #{userId}
+    </delete>
+
+    <select id="existsByUserIdAndProductId" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM cart_items 
+        WHERE user_id = #{userId} AND product_id = #{productId}
+    </select>
+
+</mapper>
