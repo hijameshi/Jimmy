@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Query Diagram Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SQL Query Diagram Generator</h1>
+            <p>Enter your SQL query and generate a data flow diagram</p>
+        </header>
+
+        <div class="main-content">
+            <div class="input-section">
+                <div class="query-input-container">
+                    <label for="sqlQuery">SQL Query:</label>
+                    <textarea id="sqlQuery" placeholder="Enter your SQL query here..."></textarea>
+                    <div class="button-container">
+                        <button id="generateBtn" class="btn btn-primary">Generate Diagram</button>
+                        <button id="clearBtn" class="btn btn-secondary">Clear</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="diagram-section">
+                <div id="diagramContainer" class="diagram-container">
+                    <div class="placeholder">
+                        <svg width="800" height="600" id="diagramSvg"></svg>
+                        <div class="placeholder-text">
+                            <p>Your diagram will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="legend">
+            <h3>Legend</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color table-color"></div>
+                    <span>Tables</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color cte-color"></div>
+                    <span>CTEs (Common Table Expressions)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color result-color"></div>
+                    <span>Result Set</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/diagram.js') }}"></script>
+</body>
+</html>
